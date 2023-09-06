@@ -77,34 +77,7 @@ impulse(systemCT);
 eig(A);
 % Spectral abscissa
 rho = max(real(eig(A)));
-% Eigenvalues on the diagonal of D and eigenvectors on columns of V
-[Vec, Dc] = eig(A);
+% Eigenvalues on the D and eigenvectors
+[V, D] = eig(A);
 % Columns of V are the generalized eigenvectors
-[Vjc, Jc] = jordan(A);
-
-%% D-T system analysis
-% sampling time TS
-TS = 1.0;
-systemDT = c2d(systemCT, TS);
-[F,G,H,L,Ts]=ssdata(systemDT);
-
-% Step response
-figure;
-step(systemDT);
-% Impulse response
-figure;
-impulse(systemDT);
-% Eigenvalues
-eig(F)
-% Spectral abscissa
-rho = max(abs(eig(F)))
-% Eigenvalues on the diagonal of D and eigenvectors on columns of V
-[Ved, Dd] = eig(F)
-% Columns of V are the generalized eigenvectors
-[Vjd, Jd] = jordan(F)
-
-%%
-
-
-
-
+[V, J] = jordan(A);
