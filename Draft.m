@@ -64,6 +64,12 @@ A = [-1/T1 0 A3/(A1*T3) 0; 0 -1/T2 0 A4/(A2*T4); 0 0 -1/T3 0; 0 0 0 -1/T4];
 B = [(gamma1*k1)/A1 0; 0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3; ((1-gamma1)*k1)/A4 0];
 C = [kc 0 0 0; 0 kc 0 0];
 D = 0;
+% The system is input-decoupled since B is block diagonal after switching row 2 and row 4
+A = [-1/T1 0 A3/(A1*T3) 0; 0 0 0 -1/T4; 0 0 -1/T3 0; 0 -1/T2 0 A4/(A2*T4)];
+B1 = [(gamma1*k1)/A1 0; ((1-gamma1)*k1)/A4 0];
+B2 = [0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3];
+C1 = [kc 0 0 0];
+C2 = [0 kc 0 0];
 
 %% C-T system analysis
 systemCT = ss(A,B,C,D);
