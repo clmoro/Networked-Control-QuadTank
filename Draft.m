@@ -61,17 +61,14 @@ double(solve((1+x*T3)*(1+x*T4)-k==0));
 
 %% State-space matrices
 A = [-1/T1 0 A3/(A1*T3) 0; 0 -1/T2 0 A4/(A2*T4); 0 0 -1/T3 0; 0 0 0 -1/T4];
-B = [(gamma1*k1)/A1 0; 0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3; ((1-gamma1)*k1)/A4 0];
-C = [kc 0 0 0; 0 kc 0 0];
+B = [(gamma1*k1)/A1 0; 0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3; ((1-gamma1)*k1)/A4 0]
+C = [kc 0 0 0; 0 kc 0 0]
 D = 0;
-% The system is input-decoupled since B is block diagonal after switching row 2 and row 4
-% A = [-1/T1 0 A3/(A1*T3) 0; 0 0 0 -1/T4; 0 0 -1/T3 0; 0 -1/T2 0 A4/(A2*T4)];
-% B1 = [(gamma1*k1)/A1 0; ((1-gamma1)*k1)/A4 0];
-% B2 = [0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3];
-% B = [B1; B2];
-% C1 = [kc 0 0 0];
-% C2 = [0 kc 0 0];
-% C = [C1; C2];
+% The system is input-decoupled and output-decoupled
+B1 = B(:,1)
+B2 = B(:,2)
+C1 = C(1,:)
+C2 = C(2,:)
 
 %% C-T system analysis
 systemCT = ss(A,B,C,D);
@@ -111,7 +108,8 @@ rho = max(abs(eig(F)));
 % Columns of V are the generalized eigenvectors
 [Vjd, Jd] = jordan(F);
 
-%%
+%%Decoupled system
+[A,B,C,F,G,H]=coupled_CSB(4,1,1);
 
 
 

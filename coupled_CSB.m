@@ -1,5 +1,5 @@
 function [A,B,C,F,G,H]=coupled_CSB(N,coupling,h)
-% Defines the model of N coupled (through dumpers) Cart Stick Balancers
+% Defines the model of N coupled Systems
 % Inputs: 
 % - N (number of subsystems)
 % - coupling (coupling value, e.g., 1,2,...)
@@ -12,7 +12,7 @@ function [A,B,C,F,G,H]=coupled_CSB(N,coupling,h)
 % - G: DT input matrices (i.e., G{1},..., G{N} are the input matrices of the decomposed system, one for each channel)
 % - H: DT output matrices (i.e., H{1},..., H{N} are the output matrices of the decomposed system, one for each channel)
 
-% continuous-time system dynamics of a cart-stick balancer
+% continuous-time system dynamics
 Ai=[0 1 0; 31.33 0 0.016;-31.33 0 -0.216];
 Bi=[0;-0.649;8.649];
 L=abs(Ai(3,3)/Ai(2,3));
