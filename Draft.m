@@ -91,7 +91,7 @@ rho = max(real(eig(A)));
 [Vjc, Jc] = jordan(A);
 
 %% D-T system analysis
-% sampling time TS
+% sampling time TS chose considering Ttransient = 5/rho
 TS = 1.0;
 systemDT = c2d(systemCT, TS);
 [F,G,H,L,Ts]=ssdata(systemDT);
