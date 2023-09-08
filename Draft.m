@@ -78,6 +78,12 @@ N = rank(A);
 
 %% C-T system analysis
 systemCT = ss(A,B,C,D);
+N = 2;
+rounding_n = 3;
+Bdec{1} = B(:,1);
+Bdec{2} = B(:,2);
+Cdec{1} = C(1,:);
+Cdec{2} = C(2,:);
 % Step response
 figure;
 step(systemCT);
@@ -98,6 +104,10 @@ rho = max(real(eig(A)));
 TS = 1.0;
 systemDT = c2d(systemCT, TS);
 [F,G,H,L,Ts]=ssdata(systemDT);
+Gdec{1} = G(:,1);
+Gdec{2} = G(:,2);
+Hdec{1} = H(1,:);
+Hdec{2} = H(2,:);
 
 % Step response
 figure;
@@ -115,6 +125,7 @@ rho = max(abs(eig(F)));
 [Vjd, Jd] = jordan(F);
 
 %% Centralized Fixed Modes
+
 % C-T
 ContStruc = ones(N,N);
 [CFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
@@ -124,13 +135,6 @@ ContStruc = ones(N,N);
 
 
 %% Decentralized Fixed Modes 
-N = 2;
-rounding_n = 3;
-Bdec{1} = B(:,1);
-Bdec{2} = B(:,2);
-Cdec{1} = C(1,:);
-Cdec{2} = C(2,:);
-
 % C-T
 ContStruc = diag(ones(N,1));
 [DFM_CT] = di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
