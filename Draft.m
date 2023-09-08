@@ -64,13 +64,17 @@ A = [-1/T1 0 A3/(A1*T3) 0; 0 -1/T2 0 A4/(A2*T4); 0 0 -1/T3 0; 0 0 0 -1/T4];
 B = [(gamma1*k1)/A1 0; 0 (gamma2*k2)/A2; 0 ((1-gamma2)*k2)/A3; ((1-gamma1)*k1)/A4 0];
 C = [kc 0 0 0; 0 kc 0 0];
 D = 0;
+
 % The system is input-decoupled and output-decoupled
-N = 2;
-rounding_n = 3;
-Bdec{1} = B(:,1);
-Bdec{2} = B(:,2);
-Cdec{1} = C(1,:);
-Cdec{2} = C(2,:);
+% So we can decompose the input and output vectors in 2 non-overlapping
+% subvectors: u1,u2 and y1,y2
+B1 = B(:,1);
+B2 = B(:,2);
+C1 = C(1,:);
+C2 = C(2,:);
+
+% Order of the system
+N = rank(A);
 
 %% C-T system analysis
 systemCT = ss(A,B,C,D);
@@ -94,10 +98,6 @@ rho = max(real(eig(A)));
 TS = 1.0;
 systemDT = c2d(systemCT, TS);
 [F,G,H,L,Ts]=ssdata(systemDT);
-Gdec{1} = G(:,1);
-Gdec{2} = G(:,2);
-Hdec{1} = H(1,:);
-Hdec{2} = H(2,:);
 
 % Step response
 figure;
@@ -114,31 +114,38 @@ rho = max(abs(eig(F)));
 % Columns of V are the generalized eigenvectors
 [Vjd, Jd] = jordan(F);
 
-%% Centralized Fixed Modes C-T
+%% Centralized Fixed Modes
+% C-T
 ContStruc = ones(N,N);
-[CFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n)
+[CFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
+
+% D-T
+[CFM_DT] = di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n);
 
 
-%% Centralized Fixed Modes D-T
-[CFM_DT]=di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n)
+%% Decentralized Fixed Modes 
+N = 2;
+rounding_n = 3;
+Bdec{1} = B(:,1);
+Bdec{2} = B(:,2);
+Cdec{1} = C(1,:);
+Cdec{2} = C(2,:);
 
-
-%% Decentralized Fixed Modes C-T
+% C-T
 ContStruc = diag(ones(N,1));
-[DFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n)
+[DFM_CT] = di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
 
+% D-T
+[DFM_DT] = di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n);
 
-%% Decentralized Fixed Modes D-T
-[DFM_DT]=di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n)
-
-
-%% Distributed Fixed Modes C-T
+%% Distributed Fixed Modes 
+% % C-T
 % ContStruc = [1 1
 %               1 1];
 
+% % D-T
 
-%% Distributed0 Fixed Modes D-T
-
-
+%% Decoupled system
+[A,B,C,F,G,H]=coupled_CSB(4,1,1);
 
 
