@@ -123,10 +123,10 @@ ContStruc = ones(N,N);
 
 %% Decentralized Control
 % ContStruc = diag(ones(N,1));
-% [DFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
-% [DFM_DT]=di_fixed_modes(F,Gdec,Hdec,N,ContStruc,rounding_n);
-% [K_dec_CT, rho_dec_CT, feas_dec_CT] = LMI_CT_DeDicont(A,Bdec,Cdec,N,ContStruc);
-% [K_dec_DT, rho_dec_DT, feas_dec_DT] = LMI_DT_DeDicont(F,Gdec,Hdec,N,ContStruc);
+[DFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
+[DFM_DT]=di_fixed_modes(F,Gdec,Hdec,N,ContStruc,rounding_n);
+[K_dec_CT, rho_dec_CT, feas_dec_CT] = LMI_CT_DeDicont(A,Bdec,Cdec,N,ContStruc)
+[K_dec_DT, rho_dec_DT, feas_dec_DT] = LMI_DT_DeDicont(F,Gdec,Hdec,N,ContStruc)
 
 %% Distributed Control
 % ContStruc = [1 1
