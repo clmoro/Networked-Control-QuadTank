@@ -51,13 +51,20 @@ G22 = gamma2*c2/(1+s*T2);
 G = [G11 G12;G21 G22];
 
 %% Zero location
+% k is the eta parameter of the paper, where k =
+% (1-gamma1)*(1-gamma2)/(gamma1*gamma2)
 % condition: 1-(T3+T4)^2/(4*T3*T4)<=k<=1 
 % if k>1 --> s>0 
 % if k<-0.0334 --> s are imaginaries (Re<0) 
 % if k = 0 --> s are -1/T3 and -1/T4
 k = 0;  
 syms x;
-double(solve((1+x*T3)*(1+x*T4)-k==0));
+TheoreticalZero = double(solve((1+x*T3)*(1+x*T4)-k==0));
+% disp(['k = ',num2str(k),'     zero =',num2str(TheoreticalZero(1)),'   ',num2str(TheoreticalZero(2))])
+
+k = (1-gamma1)*(1-gamma2)/(gamma1*gamma2);
+ActualZero = double(solve((1+x*T3)*(1+x*T4)-k==0));
+disp(['Actual Zeros are in ',num2str(ActualZero(1)),' and ',num2str(ActualZero(2)),'.'])
 
 %% State-space matrices
 A = [-1/T1 0 A3/(A1*T3) 0; 0 -1/T2 0 A4/(A2*T4); 0 0 -1/T3 0; 0 0 0 -1/T4];
