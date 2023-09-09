@@ -114,30 +114,24 @@ rho = max(abs(eig(F)));
 % Columns of V are the generalized eigenvectors
 [Vjd, Jd] = jordan(F);
 
-%% Centralized Fixed Modes C-T
+%% Centralized Control
 ContStruc = ones(N,N);
-[CFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n)
+[CFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
+[CFM_DT]=di_fixed_modes(F,Gdec,Hdec,N,ContStruc,rounding_n);
+[K_c_CT, rho_c_CT, feas_c_CT] = LMI_CT_DeDicont(A,Bdec,Cdec,N,ContStruc);
+[K_c_DT, rho_c_DT, feas_c_DT] = LMI_DT_DeDicont(F,Gdec,Hdec,N,ContStruc);
 
+%% Decentralized Control
+% ContStruc = diag(ones(N,1));
+% [DFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n);
+% [DFM_DT]=di_fixed_modes(F,Gdec,Hdec,N,ContStruc,rounding_n);
+% [K_dec_CT, rho_dec_CT, feas_dec_CT] = LMI_CT_DeDicont(A,Bdec,Cdec,N,ContStruc);
+% [K_dec_DT, rho_dec_DT, feas_dec_DT] = LMI_DT_DeDicont(F,Gdec,Hdec,N,ContStruc);
 
-%% Centralized Fixed Modes D-T
-[CFM_DT]=di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n)
-
-
-%% Decentralized Fixed Modes C-T
-ContStruc = diag(ones(N,1));
-[DFM_CT]=di_fixed_modes(A,Bdec,Cdec,N,ContStruc,rounding_n)
-
-
-%% Decentralized Fixed Modes D-T
-[DFM_DT]=di_fixed_modes(A,Gdec,Hdec,N,ContStruc,rounding_n)
-
-
-%% Distributed Fixed Modes C-T
+%% Distributed Control
 % ContStruc = [1 1
 %               1 1];
 
-
-%% Distributed0 Fixed Modes D-T
 
 
 
