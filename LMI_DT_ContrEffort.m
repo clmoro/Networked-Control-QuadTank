@@ -51,8 +51,17 @@ else
     end
 end
 
+al = 0.01;
+ay = 10;
+kl = sdpvar(1);
+ky = sdpvar(1);
 LMIconstr=[[P-F*P*F'-F*L'*Gtot'-Gtot*L*F' Gtot*L;
     L'*Gtot' P]>=1e-2*eye(ntot*2)];
+LMIconstr = LMIconstr+[[kl*eye(size(L',1)),L';
+                        L,eye(size(L',2))]>=1e-2*eye(size(L',1)+size(L',2))];
+LMIconstr = LMIconstr+[[ky*eye(ntot),eye(ntot);
+                        eye(ntot) P]>=1e-2*eye(ntot+ntot)];
+LMIobj = al*kl+ay*ky;
 %options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr);%,[],options);
 feas=J.problem;
