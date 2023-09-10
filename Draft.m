@@ -57,13 +57,20 @@ G22 = gamma2*c2/(1+s*T2);
 G = [G11 G12;G21 G22];
 
 %% Zero location
+% k is the eta parameter of the paper, where k =
+% (1-gamma1)*(1-gamma2)/(gamma1*gamma2)
 % condition: 1-(T3+T4)^2/(4*T3*T4)<=k<=1 
 % if k>1 --> s>0 
 % if k<-0.0334 --> s are imaginaries (Re<0) 
 % if k = 0 --> s are -1/T3 and -1/T4
-% k = 0;  
-% syms x;
-% double(solve((1+x*T3)*(1+x*T4)-k==0));
+k = 0;  
+syms x;
+TheoreticalZero = double(solve((1+x*T3)*(1+x*T4)-k==0));
+% disp(['k = ',num2str(k),'     zero =',num2str(TheoreticalZero(1)),'   ',num2str(TheoreticalZero(2))])
+
+k = (1-gamma1)*(1-gamma2)/(gamma1*gamma2);
+ActualZero = double(solve((1+x*T3)*(1+x*T4)-k==0));
+disp(['Actual Zeros are in ',num2str(ActualZero(1)),' and ',num2str(ActualZero(2)),'.'])
 
 %% State-space matrices
 % The system is input-decoupled
@@ -103,16 +110,18 @@ rounding_n = 3;
 
 %% C-T system analysis
 systemCT = ss(Atot,B,C,D);
+
 % Step response
 figure;
 step(systemCT);
 % Impulse response
 figure;
 impulse(systemCT);
+
 % Eigenvalues
-eig(Atot);
+eig_OL_CT=eig(Atot);
 % Spectral abscissa
-rho = max(real(eig(Atot)));
+rho_CT = max(real(eig(Atot)));
 % Eigenvalues on the diagonal of D and eigenvectors on columns of V
 [Vec, Dc] = eig(Atot);
 % Columns of V are the generalized eigenvectors
@@ -120,7 +129,7 @@ rho = max(real(eig(Atot)));
 
 %% D-T system analysis
 % sampling time TS chose considering Ttransient = 5/rho
-TS = 1.0;
+TS = 1;
 systemDT = c2d(systemCT, TS);
 [Ftot,G,H,L,Ts]=ssdata(systemDT);
 Gdec{1} = G(:,1);
@@ -134,35 +143,132 @@ step(systemDT);
 % Impulse response
 figure;
 impulse(systemDT);
+
 % Eigenvalues
-eig(Ftot);
+eig_OL_DT=eig(Ftot);
 % Spectral abscissa
-rho = max(abs(eig(Ftot)));
+rho_DT = max(abs(eig(Ftot)));
 % Eigenvalues on the diagonal of D and eigenvectors on columns of V
 [Ved, Dd] = eig(Ftot);
 % Columns of V are the generalized eigenvectors
 [Vjd, Jd] = jordan(Ftot);
 
-%% Centralized Control
+%% STABLE CONTROLLER
+% Centralized
 ContStruc = ones(N,N);
 [CFM_CT]=di_fixed_modes(Atot,Bdec,Cdec,N,ContStruc,rounding_n);
 [CFM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_c_CT, rho_c_CT, feas_c_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_c_DT, rho_c_DT, feas_c_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
 
-%% Decentralized Control
+% Decentralized
 ContStruc = diag(ones(N,1));
-
 [DFM_CT]=di_fixed_modes(Atot,Bdec,Cdec,N,ContStruc,rounding_n);
 [DFM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_dec_CT, rho_dec_CT, feas_dec_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_dec_DT, rho_dec_DT, feas_dec_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
 
-%% Distributed Control
-% ContStruc = [1 1
-%               1 1];
+% Distributed 1
+ContStruc = [1 0
+              1 1];
+[Dist1FM_CT]=di_fixed_modes(Atot,Bdec,Cdec,N,ContStruc,rounding_n);
+[Dist1FM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
+[K_dist1_CT, rho_dist1_CT, feas_dist1_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist1_DT, rho_dist1_DT, feas_dist1_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
 
+% Distributed 2
+ContStruc = [1 0
+              1 1];
+[Dist2FM_CT]=di_fixed_modes(Atot,Bdec,Cdec,N,ContStruc,rounding_n);
+[Dist2FM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
+[K_dist2_CT, rho_dist2_CT, feas_dist2_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist2_DT, rho_dist2_DT, feas_dist2_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
 
+%% REDUCTION OF THE CONTROL EFFORT CONTROLLER
+% Centralized
+ContStruc = ones(N,N);
+[K_c_CT_2, rho_c_CT_2, feas_c_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
+% [K_c_DT_2, rho_c_DT_2, feas_c_DT_2] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
 
+%% Results
+% STABLE CONTROLLER
+% Continuos time
+clc
+disp('Results STABLE CONTROLLER (Continuous-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_CT),', rho=',num2str(rho_c_CT),', FM=',num2str(CFM_CT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT),', rho=',num2str(rho_dec_CT),', FM=',num2str(DFM_CT),'.'])
+disp(['-  Distributed1 (u2-x1): Feasibility=',num2str(feas_dist1_CT),', rho=',num2str(rho_dist1_CT),', FM=',num2str(Dist1FM_CT),'.'])
+disp(['-  Distributed2 (u1-x2): Feasibility=',num2str(feas_dist2_CT),', rho=',num2str(rho_dist2_CT),', FM=',num2str(Dist2FM_CT),'.'])
+% Discrete time
+disp('Results STABLE CONTROLLER (Discrete-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_DT),', rho=',num2str(rho_c_DT),', FM=',num2str(CFM_DT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT),', rho=',num2str(rho_dec_DT),', FM=',num2str(DFM_DT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT),', rho=',num2str(rho_dist1_DT),', FM=',num2str(Dist1FM_DT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT),', rho=',num2str(rho_dist2_DT),', FM=',num2str(Dist2FM_DT),'.'])
+pause
 
+% REDUCTION OF THE CONTROL EFFORT
+% Continuos time
+clc
+disp('Results REDUCTION OF THE CONTROL EFFORT (Continuous-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_2),', rho=',num2str(rho_c_CT_2),', FM=',num2str(CFM_CT),'.'])
+% disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT),', rho=',num2str(rho_dec_CT),', FM=',num2str(DFM_CT),'.'])
+% disp(['-  Distributed (u2-x1): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
+% disp(['-  Distributed (u1-x2): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
+% % Discrete time
+% disp('Results REDUCTION OF THE CONTROL EFFORT (Discrete-time):')
+% disp(['-  Centralized: Feasibility=',num2str(feas_c_DT),', rho=',num2str(rho_c_DT),', FM=',num2str(CFM_DT),'.'])
+% disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT),', rho=',num2str(rho_dec_DT),', FM=',num2str(DFM_DT),'.'])
+% disp(['-  Distributed (u2-x1): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
+% disp(['-  Distributed (u1-x2): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
 
+%% Analysis
+%Eigenvalues
+% Continuos
+figure;
+plot(eig_OL_CT,'o');grid;title('CT open loop eigenvalues')
+% Discrete
+figure;
+plot(eig_OL_DT,'o');grid;title('DT open loop eigenvalues')
+
+% Centralized control
+% CT closed-loop stability
+A_c_cl=Atot+B*K_c_CT;
+eig_c_CL_CT=eig(A_c_cl);
+figure;
+plot(eig_c_CL_CT,'o');grid;title('CT centralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
+% Free motion
+% x0=[10.0 4.0 5.0 8.0]';
+% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
+% Tsp=0.01;
+% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
+% DT closed-loop stability
+F_c_cl=Ftot+B*K_c_DT;
+eig_c_CL_DT=eig(F_c_cl);
+figure;
+plot(eig_c_CL_DT,'o');grid;title('DT centralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
+% Free motion
+% x0=[10.0 4.0 5.0 8.0]';
+% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
+% Tsp=0.01;
+% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
+
+% Decentralized Control
+% CT closed-loop stability
+A_dec_cl=Atot+B*K_dec_CT;
+eig_dec_CL_CT=eig(A_dec_cl);
+figure;
+plot(eig_dec_CL_CT,'o');grid;title('CT decentralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
+% DT closed-loop stability
+F_dec_cl=Ftot+B*K_dec_DT;
+eig_dec_CL_DT=eig(F_dec_cl);
+figure;
+plot(eig_dec_CL_DT,'o');grid;title('DT decentralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
