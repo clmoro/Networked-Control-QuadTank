@@ -1,3 +1,9 @@
+%% Initialization
+clc
+clear
+close all
+
+%% Parameters
 %  General Parameters
 A1 = 28;    % [cm^2]
 A2 = 32;    % [cm^2]
