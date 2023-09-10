@@ -216,8 +216,21 @@ Gain{2} = [];
 % Centralized
 ContStruc = ones(N,N);
 [K_c_CT_2, rho_c_CT_2, feas_c_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
-[K_c_DT_2, rho_c_DT_2, feas_c_DT_2] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
-
+[K_c_DT_2, rho_c_DT_2, feas_c_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
+% Decentralized
+ContStruc = diag(ones(N,1));
+[K_dec_CT_2, rho_dec_CT_2, feas_dec_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
+[K_dec_DT_2, rho_dec_DT_2, feas_dec_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 1
+ContStruc = [1 0
+              1 1];
+[K_dist1_CT_2, rho_dist1_CT_2, feas_dist1_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist1_DT_2, rho_dist1_DT_2, feas_dist1_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 2
+ContStruc = [1 1
+              0 1];
+[K_dist2_CT_2, rho_dist2_CT_2, feas_dist2_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist2_DT_2, rho_dist2_DT_2, feas_dist2_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
 %% Results
 % Gain = table(Gain{1},Gain{2},'VariableNames',{'Stable controller','Reduct of control effort'});
 % STABLE CONTROLLER
@@ -234,27 +247,26 @@ disp(['-  Centralized: Feasibility=',num2str(feas_c_DT),', rho=',num2str(rho_c_D
 disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT),', rho=',num2str(rho_dec_DT),', FM=',num2str(DFM_DT),'.'])
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT),', rho=',num2str(rho_dist1_DT),', FM=',num2str(Dist1FM_DT),'.'])
 disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT),', rho=',num2str(rho_dist2_DT),', FM=',num2str(Dist2FM_DT),'.'])
-pause
 
 % REDUCTION OF THE CONTROL EFFORT
 % Continuos time
 clc
 disp('Results REDUCTION OF THE CONTROL EFFORT (Continuous-time):')
 disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_2),', rho=',num2str(rho_c_CT_2),', FM=',num2str(CFM_CT),'.'])
-disp(['-  Decentralized: Feasibility=',num2str(feas_c_DT_2),', rho=',num2str(rho_c_DT_2),', FM=',num2str(DFM_CT),'.'])
-% disp(['-  Distributed (u2-x1): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
-% disp(['-  Distributed (u1-x2): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_2),', rho=',num2str(rho_dec_CT_2),', FM=',num2str(DFM_CT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_CT_2),', rho=',num2str(rho_dist1_CT_2),', FM=',num2str(Dist1FM_CT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_CT_2),', rho=',num2str(rho_dist2_CT_2),', FM=',num2str(Dist2FM_CT),'.'])
 % % Discrete time
-% disp('Results REDUCTION OF THE CONTROL EFFORT (Discrete-time):')
-% disp(['-  Centralized: Feasibility=',num2str(feas_c_DT),', rho=',num2str(rho_c_DT),', FM=',num2str(CFM_DT),'.'])
-% disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT),', rho=',num2str(rho_dec_DT),', FM=',num2str(DFM_DT),'.'])
-% disp(['-  Distributed (u2-x1): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
-% disp(['-  Distributed (u1-x2): Feasibility=',num2str(),', rho=',num2str(),', FM=',num2str(),'.'])
+disp('Results REDUCTION OF THE CONTROL EFFORT (Discrete-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_2),', rho=',num2str(rho_c_DT_2),', FM=',num2str(CFM_DT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_2),', rho=',num2str(rho_dec_DT_2),', FM=',num2str(DFM_DT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_2),', rho=',num2str(rho_dist1_DT_2),', FM=',num2str(Dist1FM_DT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_2),', rho=',num2str(rho_dist2_DT_2),', FM=',num2str(Dist2FM_DT),'.'])
 
 %% Analysis closed-loop stability
 
 % CT closed-loop stability
-% Eigenvalues CENTRALIZED 
+% Eigenvalues2 CENTRALIZED 
 A_c_cl=Atot+B*K_c_CT;
 eig_c_CL_CT=eig(A_c_cl);
 % Eigenvalues DECENTRALIZED
