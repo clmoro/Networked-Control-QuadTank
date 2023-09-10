@@ -130,7 +130,7 @@ rho_CT = max(real(eig(Atot)));
 % Eigenvalues plot
 figure
 plot(real(eig_OL_CT),imag(eig_OL_CT),'*b','MarkerSize',8,'LineWidth',2);
-grid;title('CT open loop eigenvalues','FontSize',20);legend('Open loop')
+grid;title('CT Open loop eigenvalue Positions','FontSize',20);legend('Open loop','FontSize',18)
 xlabel('Real Axis [seconds^{-1}]','FontSize',18);ylabel('Imaginary Axis [seconds^{-1}]','FontSize',18);
 
 %% D-T system analysis
@@ -165,8 +165,8 @@ x = [-1:0.01:1];
 y = sqrt(1-x.^2);
 hold on
 plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
-plot(real(eig_OL_DT),imag(eig_OL_DT),'*r','MarkerSize',8,'LineWidth',2);
-title('DT open loop eigenvalues','FontSize',20);legend('','','','','','Open loop')
+plot(real(eig_OL_DT),imag(eig_OL_DT),'*r','MarkerSize',8,'LineWidth',2);legend('','','','','','Open loop','FontSize',18)
+title('DT Open loop eigenvalue positions','FontSize',20);
 xlabel('Real Axis [seconds^{-1}]','FontSize',18);ylabel('Imaginary Axis [seconds^{-1}]','FontSize',18);
 hold off
 
@@ -250,7 +250,6 @@ disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT),', rho=',num
 
 % REDUCTION OF THE CONTROL EFFORT
 % Continuos time
-clc
 disp('Results REDUCTION OF THE CONTROL EFFORT (Continuous-time):')
 disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_2),', rho=',num2str(rho_c_CT_2),', FM=',num2str(CFM_CT),'.'])
 disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_2),', rho=',num2str(rho_dec_CT_2),', FM=',num2str(DFM_CT),'.'])
@@ -266,7 +265,7 @@ disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_2),', rho=',n
 %% Analysis closed-loop stability
 
 % CT closed-loop stability
-% Eigenvalues2 CENTRALIZED 
+% Eigenvalues CENTRALIZED 
 A_c_cl=Atot+B*K_c_CT;
 eig_c_CL_CT=eig(A_c_cl);
 % Eigenvalues DECENTRALIZED
@@ -282,10 +281,10 @@ eig_dist2_CL_CT=eig(A_dist2_cl);
 % PLOT Continuos time
 figure
 plot(real(eig_c_CL_CT),imag(eig_c_CL_CT),'xk',real(eig_dec_CL_CT),imag(eig_dec_CL_CT),'xr',real(eig_dist1_CL_CT),imag(eig_dist1_CL_CT),'*g',real(eig_dist2_CL_CT),imag(eig_dist2_CL_CT),'xb','MarkerSize',8,'LineWidth',2);
-grid on
-xlabel('\alpha [1/s]');ylabel('\omega [rad/s]');
-title('Eigenvalue position - System and State Observer')
-legend('CT Open loop','CT centralized closed loop','CT decentralized closed loop')
+grid
+xlabel('\alpha [1/s]','FontSize',18);ylabel('\omega [rad/s]','FontSize',18);
+title('CT Closed-loop eigenvalue positions','FontSize',20)
+legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
 
 
 % for i = 1:NumCont(1)
