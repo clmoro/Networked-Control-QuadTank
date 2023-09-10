@@ -54,7 +54,7 @@ G11 = gamma1*c1/(1+s*T1);
 G12 = (1-gamma2)*c1/((1+s*T3)*(1+s*T1));
 G21 = (1-gamma1)*c2/((1+s*T4)*(1+s*T2));
 G22 = gamma2*c2/(1+s*T2);
-G = [G11 G12;G21 G22];
+Gtf = [G11 G12;G21 G22];
 
 %% Zero location
 % k is the eta parameter of the paper, where k =
