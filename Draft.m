@@ -160,6 +160,30 @@ ContStruc = ones(N,N);
 [CFM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_c_CT, rho_c_CT, feas_c_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_c_DT, rho_c_DT, feas_c_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
+% CT closed-loop stability
+A_c_cl=Atot+B*K_c_CT;
+eig_c_CL_CT=eig(A_c_cl);
+figure;
+plot(eig_c_CL_CT,'o');grid;title('CT centralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
+% Free motion
+% x0=[10.0 4.0 5.0 8.0]';
+% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
+% Tsp=0.01;
+% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
+% DT closed-loop stability
+F_c_cl=Ftot+B*K_c_DT;
+eig_c_CL_DT=eig(F_c_cl);
+figure;
+plot(eig_c_CL_DT,'o');grid;title('DT centralized closed loop eigenvalues')
+xlabel('Real')
+ylabel('Imaginary')
+% Free motion
+% x0=[10.0 4.0 5.0 8.0]';
+% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
+% Tsp=0.01;
+% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
 
 % Decentralized
 ContStruc = diag(ones(N,1));
