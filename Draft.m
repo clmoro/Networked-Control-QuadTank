@@ -131,7 +131,7 @@ rho_CT = max(real(eig(Atot)));
 figure
 plot(real(eig_OL_CT),imag(eig_OL_CT),'*b','MarkerSize',8,'LineWidth',2);
 grid;title('CT Open loop eigenvalue Positions','FontSize',20);legend('Open loop','FontSize',18)
-xlabel('Real Axis [seconds^{-1}]','FontSize',18);ylabel('Imaginary Axis [seconds^{-1}]','FontSize',18);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis]','FontSize',18);
 
 %% D-T system analysis
 % sampling time TS chose considering Ttransient = 5/rho
@@ -167,7 +167,7 @@ hold on
 plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
 plot(real(eig_OL_DT),imag(eig_OL_DT),'*r','MarkerSize',8,'LineWidth',2);legend('','','','','','Open loop','FontSize',18)
 title('DT Open loop eigenvalue positions','FontSize',20);
-xlabel('Real Axis [seconds^{-1}]','FontSize',18);ylabel('Imaginary Axis [seconds^{-1}]','FontSize',18);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 hold off
 
 %% STABLE CONTROLLER
@@ -282,7 +282,7 @@ eig_dist2_CL_CT=eig(A_dist2_cl);
 figure
 plot(real(eig_c_CL_CT),imag(eig_c_CL_CT),'xk',real(eig_dec_CL_CT),imag(eig_dec_CL_CT),'xr',real(eig_dist1_CL_CT),imag(eig_dist1_CL_CT),'*g',real(eig_dist2_CL_CT),imag(eig_dist2_CL_CT),'xb','MarkerSize',8,'LineWidth',2);
 grid
-xlabel('\alpha [1/s]','FontSize',18);ylabel('\omega [rad/s]','FontSize',18);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 title('CT Closed-loop eigenvalue positions','FontSize',20)
 legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
 
