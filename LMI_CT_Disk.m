@@ -54,8 +54,8 @@ end
 alpha = 8; % We constraints Re(eigs(A))<alpha
 rho = 1; % We constraints all eigs to have radius < rho
 % Dimensions of the matrices: Kx(mtot,ntot), L(mtot,ntot), Y(ntot,ntot).
-LMIconstr = [[(rho^2-alpha^2)*P-A*P*A'-A*L'*B'-B*L*A'-alpha*(P*A'+A*P+L'*B'+B*L),B*L;
-                L'*B',P]>=-1e-2*eye(2*ntot)];
+LMIconstr = [[(rho^2-alpha^2)*P-A*P*A'-A*L'*Btot'-Btot*L*A'-alpha*(P*A'+A*P+L'*Btot'+B*L),Btot*L;
+                L'*Btot',P]>=-1e-2*eye(2*ntot)];
 % options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr);%,[],options);
 feas=J.problem;
