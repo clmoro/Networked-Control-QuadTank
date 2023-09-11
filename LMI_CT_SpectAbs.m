@@ -1,4 +1,4 @@
-function [K,rho,feas]=LMI_CT_Disk(A,B,C,N,ContStruc)
+function [K,rho,feas]=LMI_CT_SpectAbs(A,B,C,N,ContStruc)
 % Computes, using LMIs, the distributed "state feedback" control law for the continuous-time system, with reference to the control
 % information structure specified by 'ContStruc'.
 %
@@ -31,15 +31,15 @@ yalmip clear
 
 if ContStruc==ones(N,N)
     % Centralized design
-    P=sdpvar(ntot);
+    Y=sdpvar(ntot);
     L=sdpvar(mtot,ntot);
 else
-    % Dentralized/distributed design
-    P=[];
+    % Decentralized/distributed design
+    Y=[];
     L=sdpvar(mtot,ntot);
     minc=0;
     for i=1:N
-        P=blkdiag(P,sdpvar(n(i)));
+        Y=blkdiag(Y,sdpvar(n(i)));
         ninc=0;
         for j=1:N
             if ContStruc(i,j)==0
@@ -48,19 +48,16 @@ else
             ninc=ninc+n(j);
         end
         minc=minc+m(i);
-    end
+    end  
 end
 
 alpha = 8; % We constraints Re(eigs(A))<alpha
-rho = 1; % We constraints all eigs to have radius < rho
-% Dimensions of the matrices: Kx(mtot,ntot), L(mtot,ntot), Y(ntot,ntot).
-LMIconstr = [[(rho^2-alpha^2)*P-A*P*A'-A*L'*Btot'-Btot*L*A'-alpha*(P*A'+A*P+L'*Btot'+Btot*L),Btot*L;
-                L'*Btot',P]>=-1e-2*eye(2*ntot)];
+LMIconstr=[Y*A'+A*Y+Btot*L+L'*Btot'+2*alpha*Y<=-1e-2*eye(ntot)]+[Y>=1e-2*eye(ntot)];
 options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr,[],options);
 feas=J.problem;
 L=double(L);
-P=double(P);
+Y=double(Y);
 
-K=L/P;
+K=L/Y;
 rho=max(real(eig(A+Btot*K)));
