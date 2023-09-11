@@ -1,4 +1,4 @@
-function [K,rho,feas]=LMI_CT_DeDicont(A,B,C,N,ContStruc)
+function [K,rho,feas]=LMI_CT_Disk(A,B,C,N,ContStruc)
 % Computes, using LMIs, the distributed "state feedback" control law for the continuous-time system, with reference to the control
 % information structure specified by 'ContStruc'.
 %

@@ -1,4 +1,4 @@
-function [K,rho,feas]=LMI_DT_DeDicont(F,G,H,N,ContStruc)
+function [K,rho,feas]=LMI_DT_Disk(F,G,H,N,ContStruc)
 % Computes, using LMIs, the distributed "state feedback" control law for the discrete-time system, with reference to the control
 % information structure specified by 'ContStruc'.
 %
