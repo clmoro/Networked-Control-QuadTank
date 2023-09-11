@@ -171,16 +171,12 @@ xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 hold off
 
 %% STABLE CONTROLLER
-NumCont = [2 4];    % [The number of type controller implemented, for each type how many]
-Gain{1} = [];
-
 % Centralized
 ContStruc = ones(N,N);
 [CFM_CT]=di_fixed_modes(Atot,Bdec,Cdec,N,ContStruc,rounding_n);
 [CFM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_c_CT, rho_c_CT, feas_c_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_c_DT, rho_c_DT, feas_c_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
-Gain{1} = [K_c_CT,K_c_DT];
 
 % Decentralized
 ContStruc = diag(ones(N,1));
@@ -188,8 +184,6 @@ ContStruc = diag(ones(N,1));
 [DFM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_dec_CT, rho_dec_CT, feas_dec_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_dec_DT, rho_dec_DT, feas_dec_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
-Gain{1} = [Gain;
-        K_dec_CT,K_dec_DT];
 
 % Distributed 1
 ContStruc = [1 0
@@ -198,8 +192,6 @@ ContStruc = [1 0
 [Dist1FM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_dist1_CT, rho_dist1_CT, feas_dist1_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_dist1_DT, rho_dist1_DT, feas_dist1_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
-Gain{1} = [Gain;
-         K_dist1_CT,K_dist1_DT];
 
 % Distributed 2
 ContStruc = [1 1
@@ -208,11 +200,8 @@ ContStruc = [1 1
 [Dist2FM_DT]=di_fixed_modes(Ftot,Gdec,Hdec,N,ContStruc,rounding_n);
 [K_dist2_CT, rho_dist2_CT, feas_dist2_CT] = LMI_CT_DeDicont(Atot,Bdec,Cdec,N,ContStruc);
 [K_dist2_DT, rho_dist2_DT, feas_dist2_DT] = LMI_DT_DeDicont(Ftot,Gdec,Hdec,N,ContStruc);
-Gain{1} = [Gain;
-         K_dist2_CT,K_dist2_DT];
 
 %% REDUCTION OF THE CONTROL EFFORT CONTROLLER
-Gain{2} = [];
 % Centralized
 ContStruc = ones(N,N);
 [K_c_CT_2, rho_c_CT_2, feas_c_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
@@ -233,11 +222,46 @@ ContStruc = [1 1
 [K_dist2_DT_2, rho_dist2_DT_2, feas_dist2_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
 
 %% LIMITATION ON THE SPECTRAL ABSCISSA CONTROLLER
+% Centralized
+ContStruc = ones(N,N);
+[K_c_CT_3, rho_c_CT_3, feas_c_CT_3] = LMI_CT_SpectAbs(Atot,Bdec,Cdec,N,ContStruc);
+[K_c_DT_3, rho_c_DT_3, feas_c_DT_3] = LMI_DT_SpectAbs(Ftot,Gdec,Hdec,N,ContStruc);
+% Decentralized
+ContStruc = diag(ones(N,1));
+[K_dec_CT_3, rho_dec_CT_3, feas_dec_CT_3] = LMI_CT_SpectAbs(Atot,Bdec,Cdec,N,ContStruc);
+[K_dec_DT_3, rho_dec_DT_3, feas_dec_DT_3] = LMI_DT_SpectAbs(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 1
+ContStruc = [1 0
+              1 1];
+[K_dist1_CT_3, rho_dist1_CT_3, feas_dist1_CT_3] = LMI_CT_SpectAbs(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist1_DT_3, rho_dist1_DT_3, feas_dist1_DT_3] = LMI_DT_SpectAbs(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 2
+ContStruc = [1 1
+              0 1];
+[K_dist2_CT_3, rho_dist2_CT_3, feas_dist2_CT_3] = LMI_CT_SpectAbs(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist2_DT_3, rho_dist2_DT_3, feas_dist2_DT_3] = LMI_DT_SpectAbs(Ftot,Gdec,Hdec,N,ContStruc);
 
 %% LIMITATION ON THE SPECTRAL RADIUS CONTROLLER
 
 %% LIMITATION IN A DISK CONTROLLER
-
+% Centralized
+ContStruc = ones(N,N);
+[K_c_CT_5, rho_c_CT_5, feas_c_CT_5] = LMI_CT_Disk(Atot,Bdec,Cdec,N,ContStruc);
+[K_c_DT_5, rho_c_DT_5, feas_c_DT_5] = LMI_DT_Disk(Ftot,Gdec,Hdec,N,ContStruc);
+% Decentralized
+ContStruc = diag(ones(N,1));
+[K_dec_CT_5, rho_dec_CT_5, feas_dec_CT_5] = LMI_CT_Disk(Atot,Bdec,Cdec,N,ContStruc);
+[K_dec_DT_5, rho_dec_DT_5, feas_dec_DT_5] = LMI_DT_Disk(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 1
+ContStruc = [1 0
+              1 1];
+[K_dist1_CT_5, rho_dist1_CT_5, feas_dist1_CT_5] = LMI_CT_Disk(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist1_DT_5, rho_dist1_DT_5, feas_dist1_DT_5] = LMI_DT_Disk(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 2
+ContStruc = [1 1
+              0 1];
+[K_dist2_CT_5, rho_dist2_CT_5, feas_dist2_CT_5] = LMI_CT_Disk(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist2_DT_5, rho_dist2_DT_5, feas_dist2_DT_5] = LMI_DT_Disk(Ftot,Gdec,Hdec,N,ContStruc);
 %% LIMITATION IN A REGION CONTROLLER
 
 %% Results
@@ -270,6 +294,34 @@ disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_2),', rho=',num2str(rho_c
 disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_2),', rho=',num2str(rho_dec_DT_2),', FM=',num2str(DFM_DT),'.'])
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_2),', rho=',num2str(rho_dist1_DT_2),', FM=',num2str(Dist1FM_DT),'.'])
 disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_2),', rho=',num2str(rho_dist2_DT_2),', FM=',num2str(Dist2FM_DT),'.'])
+
+% LIMITATION ON THE SPECTRAL ABSCISSA
+% Continuos time
+disp('Results LIMITATION ON THE SPECTRAL ABSCISSA (Continuous-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_3),', rho=',num2str(rho_c_CT_3),', FM=',num2str(CFM_CT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_3),', rho=',num2str(rho_dec_CT_3),', FM=',num2str(DFM_CT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_CT_3),', rho=',num2str(rho_dist1_CT_3),', FM=',num2str(Dist1FM_CT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_CT_3),', rho=',num2str(rho_dist2_CT_3),', FM=',num2str(Dist2FM_CT),'.'])
+% % Discrete time
+disp('Results LIMITATION ON THE SPECTRAL ABSCISSA (Discrete-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_3),', rho=',num2str(rho_c_DT_3),', FM=',num2str(CFM_DT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_3),', rho=',num2str(rho_dec_DT_3),', FM=',num2str(DFM_DT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_3),', rho=',num2str(rho_dist1_DT_3),', FM=',num2str(Dist1FM_DT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_3),', rho=',num2str(rho_dist2_DT_3),', FM=',num2str(Dist2FM_DT),'.'])
+
+% EIGENVALUES IN A DISK
+% Continuos time
+disp('Results EIGENVALUES IN A DISK (Continuous-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_5),', rho=',num2str(rho_c_CT_5),', FM=',num2str(CFM_CT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_5),', rho=',num2str(rho_dec_CT_5),', FM=',num2str(DFM_CT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_CT_5),', rho=',num2str(rho_dist1_CT_5),', FM=',num2str(Dist1FM_CT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_CT_5),', rho=',num2str(rho_dist2_CT_5),', FM=',num2str(Dist2FM_CT),'.'])
+% % Discrete time
+disp('Results LIMITATION ON THE SPECTRAL ABSCISSA (Discrete-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_5),', rho=',num2str(rho_c_DT_5),', FM=',num2str(CFM_DT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_5),', rho=',num2str(rho_dec_DT_5),', FM=',num2str(DFM_DT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_5),', rho=',num2str(rho_dist1_DT_5),', FM=',num2str(Dist1FM_DT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_5),', rho=',num2str(rho_dist2_DT_5),', FM=',num2str(Dist2FM_DT),'.'])
 
 %% Analysis closed-loop stability STABLE CONTROLLER
 

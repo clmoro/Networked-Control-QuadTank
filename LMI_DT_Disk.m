@@ -60,8 +60,8 @@ end
 % It is important that the disk selected (with alpha as centre and rho as radius)
 % is inside the unitary circle. So |alpha+rho|<1
 % Dimensions of the matrices: Kx(mtot,ntot), L(mtot,ntot), Y(ntot,ntot).
-LMIconstr = [[(rho^2-alpha^2)*P-A*P*A'-A*L'*B'-B*L*A'-alpha*(P*A'+A*P+L'*B'+B*L),B*L;
-                L'*B',P]>=-1e-2*eye(2*ntot)];
+LMIconstr = [[(rho^2-(1-alpha)^2)*P-F*P*F'-F*L'*Gtot'-Gtot*L*F'-(1-alpha)*(P*F'+F*P+L'*Gtot'+Gtot*L),Gtot*L;
+                L'*Gtot',P]>=-1e-2*eye(2*ntot)];
 % options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr);%,[],options);
 feas=J.problem;
