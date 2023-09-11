@@ -384,9 +384,104 @@ hold off
 
 
 
-%% SIMULATIONS
+%% SIMULATIONs
 
+% Simulation BASIC CONTROLLER
 
+Tfinal=20;
+T=[0:0.01:Tfinal];
+h=0.01;
+
+x0=[];
+x0=[x0;randn(4,1)];
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT(:,k)=expm((A_c_cl)*t)*x0;
+    x_dec_CT(:,k)=expm((A_dec_cl)*t)*x0;
+    x_dist1_CT(:,k)=expm((A_dist1_cl)*t)*x0;
+    x_dist2_CT(:,k)=expm((A_dist2_cl)*t)*x0;
+end
+for k=1:Tfinal/h
+    x_c_DT(:,k)=((F_c_cl)^k)*x0;
+    x_dec_DT(:,k)=((F_dec_cl)^k)*x0;
+    x_dist1_DT(:,k)=((F_dist1_cl)^k)*x0;
+    x_dist2_DT(:,k)=((F_dist2_cl)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT BASIC X_{',num2str(i),'}'])
+    plot(T,[x_c_CT((i),:)],'k')
+    plot(T,[x_dec_CT((i),:)],'m')
+    plot(T,[x_dist1_CT((i),:)],'b')
+    plot(T,[x_dist2_CT((i),:)],'r')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT BASIC X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT((i),:)],'r.-')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+% Simulation REDUCTION CONTROL EFFORT CONTROLLER
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT_2(:,k)=expm((A_c_cl_2)*t)*x0;
+    x_dec_CT_2(:,k)=expm((A_dec_cl_2)*t)*x0;
+    x_dist1_CT_2(:,k)=expm((A_dist1_cl_2)*t)*x0;
+    x_dist2_CT_2(:,k)=expm((A_dist2_cl_2)*t)*x0;
+end
+for k=1:Tfinal/h
+    x_c_DT_2(:,k)=((F_c_cl_2)^k)*x0;
+    x_dec_DT_2(:,k)=((F_dec_cl_2)^k)*x0;
+    x_dist1_DT_2(:,k)=((F_dist1_cl_2)^k)*x0;
+    x_dist2_DT_2(:,k)=((F_dist2_cl_2)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT REDUCED CONTROL EFFORT X_{',num2str(i),'}'])
+    plot(T,[x_c_CT_2((i),:)],'k')
+    plot(T,[x_dec_CT_2((i),:)],'m')
+    plot(T,[x_dist1_CT_2((i),:)],'b')
+    plot(T,[x_dist2_CT_2((i),:)],'r')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT REDUCED CONTROL EFFORT X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT_2((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT_2((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT_2((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT_2((i),:)],'r.-')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
 
 
