@@ -131,7 +131,7 @@ rho_CT = max(real(eig(Atot)));
 figure
 plot(real(eig_OL_CT),imag(eig_OL_CT),'*b','MarkerSize',8,'LineWidth',2);
 grid;title('CT Open loop eigenvalue Positions','FontSize',20);legend('Open loop','FontSize',18)
-xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis]','FontSize',18);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 
 %% D-T system analysis
 % sampling time TS chose considering Ttransient = 5/rho
@@ -231,6 +231,15 @@ ContStruc = [1 1
               0 1];
 [K_dist2_CT_2, rho_dist2_CT_2, feas_dist2_CT_2] = LMI_CT_ContrEffort(Atot,Bdec,Cdec,N,ContStruc);
 [K_dist2_DT_2, rho_dist2_DT_2, feas_dist2_DT_2] = LMI_DT_ContrEffort(Ftot,Gdec,Hdec,N,ContStruc);
+
+%% LIMITATION ON THE SPECTRAL ABSCISSA CONTROLLER
+
+%% LIMITATION ON THE SPECTRAL RADIUS CONTROLLER
+
+%% LIMITATION IN A DISK CONTROLLER
+
+%% LIMITATION IN A REGION CONTROLLER
+
 %% Results
 % Gain = table(Gain{1},Gain{2},'VariableNames',{'Stable controller','Reduct of control effort'});
 % STABLE CONTROLLER
@@ -262,7 +271,7 @@ disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_2),', rho=',num2str(r
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_2),', rho=',num2str(rho_dist1_DT_2),', FM=',num2str(Dist1FM_DT),'.'])
 disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_2),', rho=',num2str(rho_dist2_DT_2),', FM=',num2str(Dist2FM_DT),'.'])
 
-%% Analysis closed-loop stability
+%% Analysis closed-loop stability STABLE CONTROLLER
 
 % CT closed-loop stability
 % Eigenvalues CENTRALIZED 
@@ -278,62 +287,212 @@ eig_dist1_CL_CT=eig(A_dist1_cl);
 A_dist2_cl=Atot+B*K_dist2_CT;
 eig_dist2_CL_CT=eig(A_dist2_cl);
 
-% PLOT Continuos time
+% PLOT Continuos time closed loop STABLE CONTROLLER
 figure
 plot(real(eig_c_CL_CT),imag(eig_c_CL_CT),'xk',real(eig_dec_CL_CT),imag(eig_dec_CL_CT),'xr',real(eig_dist1_CL_CT),imag(eig_dist1_CL_CT),'*g',real(eig_dist2_CL_CT),imag(eig_dist2_CL_CT),'xb','MarkerSize',8,'LineWidth',2);
 grid
 xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
-title('CT Closed-loop eigenvalue positions','FontSize',20)
+title('CT Closed-loop eigenvalue positions BASIC','FontSize',20)
 legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
 
-
-% for i = 1:NumCont(1)
-%     for j = 1:NumCont(2)
-%         for q = 1:2 % 1 continuos, 2 discrete
-%             Acl = Atot+B*Gain{i}(j,q);
-%             eig{i}(j,q) = eig(A_cl);
-%         end
-%     end
-% end
-
-% Discrete
-% figure
-% plot(eig_OL_DT,'o');grid;title('DT open loop eigenvalues')
-
-% Centralized control
-
-% figure;
-% plot(eig_c_CL_CT,'o');grid;title('CT centralized closed loop eigenvalues')
-% xlabel('Real')
-% ylabel('Imaginary')
-% Free motion
-% x0=[10.0 4.0 5.0 8.0]';
-% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
-% Tsp=0.01;
-% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
 % DT closed-loop stability
-% F_c_cl=Ftot+B*K_c_DT;
-% eig_c_CL_DT=eig(F_c_cl);
-% figure;
-% plot(eig_c_CL_DT,'o');grid;title('DT centralized closed loop eigenvalues')
-% xlabel('Real')
-% ylabel('Imaginary')
-% Free motion
-% x0=[10.0 4.0 5.0 8.0]';
-% plot_trajectories(A,B,C,zeros(nx,nu),x0,0.01,1);
-% Tsp=0.01;
-% plot_CT(Atot,B,K_c_CT,x0,Tsp,10);
+% Eigenvalues CENTRALIZED 
+F_c_cl=Ftot+G*K_c_DT;
+eig_c_CL_DT=eig(F_c_cl);
+% Eigenvalues DECENTRALIZED
+F_dec_cl=Ftot+G*K_dec_DT;
+eig_dec_CL_DT=eig(F_dec_cl);
+% Eigenvalues DISTRIBUTED 1
+F_dist1_cl=Ftot+G*K_dist1_DT;
+eig_dist1_CL_DT=eig(F_dist1_cl);
+% Eigenvalues DISTRIBUTED 2
+F_dist2_cl=Ftot+G*K_dist2_DT;
+eig_dist2_CL_DT=eig(F_dist2_cl);
 
-% Decentralized Control
+% PLOT Discrete time closed loop STABLE CONTROLLER
+figure
+x = [-1:0.01:1];
+y = sqrt(1-x.^2);
+hold on
+plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
+plot(real(eig_c_CL_DT),imag(eig_c_CL_DT),'xk',real(eig_dec_CL_DT),imag(eig_dec_CL_DT),'xr',real(eig_dist1_CL_DT),imag(eig_dist1_CL_DT),'*g',real(eig_dist2_CL_DT),imag(eig_dist2_CL_DT),'xb','MarkerSize',8,'LineWidth',2);
+legend('','','','','','Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+title('DT Closed-loop eigenvalue positions BASIC','FontSize',20);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+hold off
 
-% figure;
-% plot(eig_dec_CL_CT,'o');grid;title('CT decentralized closed loop eigenvalues')
-% xlabel('Real')
-% ylabel('Imaginary')
-% % DT closed-loop stability
-% F_dec_cl=Ftot+B*K_dec_DT;
-% eig_dec_CL_DT=eig(F_dec_cl);
-% figure;
-% plot(eig_dec_CL_DT,'o');grid;title('DT decentralized closed loop eigenvalues')
-% xlabel('Real')
-% ylabel('Imaginary')
+%% Analysis closed-loop stability REDUCTION CONTROL EFFORT CONTROLLER
+
+% CT closed-loop stability
+% Eigenvalues CENTRALIZED 
+A_c_cl_2=Atot+B*K_c_CT_2;
+eig_c_CL_CT_2=eig(A_c_cl_2);
+% Eigenvalues DECENTRALIZED
+A_dec_cl_2=Atot+B*K_dec_CT_2;
+eig_dec_CL_CT_2=eig(A_dec_cl_2);
+% Eigenvalues DISTRIBUTED 1
+A_dist1_cl_2=Atot+B*K_dist1_CT_2;
+eig_dist1_CL_CT_2=eig(A_dist1_cl_2);
+% Eigenvalues DISTRIBUTED 2
+A_dist2_cl_2=Atot+B*K_dist2_CT_2;
+eig_dist2_CL_CT_2=eig(A_dist2_cl_2);
+
+% PLOT Continuos time closed loop STABLE CONTROLLER
+figure
+plot(real(eig_c_CL_CT_2),imag(eig_c_CL_CT_2),'xk',real(eig_dec_CL_CT_2),imag(eig_dec_CL_CT_2),'xr',real(eig_dist1_CL_CT_2),imag(eig_dist1_CL_CT_2),'*g',real(eig_dist2_CL_CT_2),imag(eig_dist2_CL_CT_2),'xb','MarkerSize',8,'LineWidth',2);
+grid
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+title('CT Closed-loop eigenvalue positions REDUCTION CONTROL EFFORT','FontSize',20)
+legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+
+% DT closed-loop stability
+% Eigenvalues CENTRALIZED 
+F_c_cl_2=Ftot+G*K_c_DT_2;
+eig_c_CL_DT_2=eig(F_c_cl_2);
+% Eigenvalues DECENTRALIZED
+F_dec_cl_2=Ftot+G*K_dec_DT_2;
+eig_dec_CL_DT_2=eig(F_dec_cl_2);
+% Eigenvalues DISTRIBUTED 1
+F_dist1_cl_2=Ftot+G*K_dist1_DT_2;
+eig_dist1_CL_DT_2=eig(F_dist1_cl_2);
+% Eigenvalues DISTRIBUTED 2
+F_dist2_cl_2=Ftot+G*K_dist2_DT_2;
+eig_dist2_CL_DT_2=eig(F_dist2_cl_2);
+
+% PLOT Discrete time closed loop STABLE CONTROLLER
+figure
+x = [-1:0.01:1];
+y = sqrt(1-x.^2);
+hold on
+plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
+plot(real(eig_c_CL_DT_2),imag(eig_c_CL_DT_2),'xk',real(eig_dec_CL_DT_2),imag(eig_dec_CL_DT_2),'xr',real(eig_dist1_CL_DT_2),imag(eig_dist1_CL_DT_2),'*g',real(eig_dist2_CL_DT_2),imag(eig_dist2_CL_DT_2),'xb','MarkerSize',8,'LineWidth',2);
+legend('','','','','','Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+title('DT Closed-loop eigenvalue positions REDUCTION CONTROL EFFORT','FontSize',20);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+hold off
+
+%% Analysis closed-loop stability REDUCTION CONTROL EFFORT CONTROLLER
+
+%% Analysis closed-loop stability LIMITATION ON THE SPECTRAL ABSCISSA CONTROLLER
+
+%% Analysis closed-loop stability LIMITATION ON THE SPECTRAL RADIUS CONTROLLER
+
+%% Analysis closed-loop stability LIMITATION IN A DISK CONTROLLER
+
+%% Analysis closed-loop stability LIMITATION IN A REGION CONTROLLER
+
+
+
+
+%% SIMULATIONs
+
+% Simulation BASIC CONTROLLER
+
+Tfinal=20;
+T=[0:0.01:Tfinal];
+h=0.01;
+
+x0=[];
+x0=[x0;randn(4,1)];
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT(:,k)=expm((A_c_cl)*t)*x0;
+    x_dec_CT(:,k)=expm((A_dec_cl)*t)*x0;
+    x_dist1_CT(:,k)=expm((A_dist1_cl)*t)*x0;
+    x_dist2_CT(:,k)=expm((A_dist2_cl)*t)*x0;
+end
+for k=1:Tfinal/h
+    x_c_DT(:,k)=((F_c_cl)^k)*x0;
+    x_dec_DT(:,k)=((F_dec_cl)^k)*x0;
+    x_dist1_DT(:,k)=((F_dist1_cl)^k)*x0;
+    x_dist2_DT(:,k)=((F_dist2_cl)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT BASIC X_{',num2str(i),'}'])
+    plot(T,[x_c_CT((i),:)],'k')
+    plot(T,[x_dec_CT((i),:)],'m')
+    plot(T,[x_dist1_CT((i),:)],'b')
+    plot(T,[x_dist2_CT((i),:)],'r')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT BASIC X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT((i),:)],'r.-')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+% Simulation REDUCTION CONTROL EFFORT CONTROLLER
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT_2(:,k)=expm((A_c_cl_2)*t)*x0;
+    x_dec_CT_2(:,k)=expm((A_dec_cl_2)*t)*x0;
+    x_dist1_CT_2(:,k)=expm((A_dist1_cl_2)*t)*x0;
+    x_dist2_CT_2(:,k)=expm((A_dist2_cl_2)*t)*x0;
+end
+for k=1:Tfinal/h
+    x_c_DT_2(:,k)=((F_c_cl_2)^k)*x0;
+    x_dec_DT_2(:,k)=((F_dec_cl_2)^k)*x0;
+    x_dist1_DT_2(:,k)=((F_dist1_cl_2)^k)*x0;
+    x_dist2_DT_2(:,k)=((F_dist2_cl_2)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT REDUCED CONTROL EFFORT X_{',num2str(i),'}'])
+    plot(T,[x_c_CT_2((i),:)],'k')
+    plot(T,[x_dec_CT_2((i),:)],'m')
+    plot(T,[x_dist1_CT_2((i),:)],'b')
+    plot(T,[x_dist2_CT_2((i),:)],'r')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT REDUCED CONTROL EFFORT X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT_2((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT_2((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT_2((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT_2((i),:)],'r.-')
+    axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
