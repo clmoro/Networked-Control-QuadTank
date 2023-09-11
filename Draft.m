@@ -242,6 +242,24 @@ ContStruc = [1 1
 [K_dist2_DT_3, rho_dist2_DT_3, feas_dist2_DT_3] = LMI_DT_SpectAbs(Ftot,Gdec,Hdec,N,ContStruc);
 
 %% LIMITATION ON THE SPECTRAL RADIUS CONTROLLER
+% Centralized
+ContStruc = ones(N,N);
+[K_c_CT_4, rho_c_CT_4, feas_c_CT_4] = LMI_CT_SpectRad(Atot,Bdec,Cdec,N,ContStruc);
+[K_c_DT_4, rho_c_DT_4, feas_c_DT_4] = LMI_DT_SpectRad(Ftot,Gdec,Hdec,N,ContStruc);
+% Decentralized
+ContStruc = diag(ones(N,1));
+[K_dec_CT_4, rho_dec_CT_4, feas_dec_CT_4] = LMI_CT_SpectRad(Atot,Bdec,Cdec,N,ContStruc);
+[K_dec_DT_4, rho_dec_DT_4, feas_dec_DT_4] = LMI_DT_SpectRad(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 1
+ContStruc = [1 0
+              1 1];
+[K_dist1_CT_4, rho_dist1_CT_4, feas_dist1_CT_4] = LMI_CT_SpectRad(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist1_DT_4, rho_dist1_DT_4, feas_dist1_DT_4] = LMI_DT_SpectRad(Ftot,Gdec,Hdec,N,ContStruc);
+% Distributed 2
+ContStruc = [1 1
+              0 1];
+[K_dist2_CT_4, rho_dist2_CT_4, feas_dist2_CT_4] = LMI_CT_SpectRad(Atot,Bdec,Cdec,N,ContStruc);
+[K_dist2_DT_4, rho_dist2_DT_4, feas_dist2_DT_4] = LMI_DT_SpectRad(Ftot,Gdec,Hdec,N,ContStruc);
 
 %% LIMITATION IN A DISK CONTROLLER
 % Centralized
@@ -309,6 +327,21 @@ disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_3),', rho=',num2str(r
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_3),', rho=',num2str(rho_dist1_DT_3),', FM=',num2str(Dist1FM_DT),'.'])
 disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_3),', rho=',num2str(rho_dist2_DT_3),', FM=',num2str(Dist2FM_DT),'.'])
 
+% LIMITATION ON THE SPECTRAL RADIUS
+% Continuos time
+disp('Results LIMITATION ON THE SPECTRAL RADIUS (Continuous-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_CT_4),', rho=',num2str(rho_c_CT_4),', FM=',num2str(CFM_CT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_4),', rho=',num2str(rho_dec_CT_4),', FM=',num2str(DFM_CT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_CT_4),', rho=',num2str(rho_dist1_CT_4),', FM=',num2str(Dist1FM_CT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_CT_4),', rho=',num2str(rho_dist2_CT_4),', FM=',num2str(Dist2FM_CT),'.'])
+% % Discrete time
+disp('Results LIMITATION ON THE SPECTRAL RADIUS (Discrete-time):')
+disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_4),', rho=',num2str(rho_c_DT_4),', FM=',num2str(CFM_DT),'.'])
+disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_4),', rho=',num2str(rho_dec_DT_4),', FM=',num2str(DFM_DT),'.'])
+disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_4),', rho=',num2str(rho_dist1_DT_4),', FM=',num2str(Dist1FM_DT),'.'])
+disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_DT_4),', rho=',num2str(rho_dist2_DT_4),', FM=',num2str(Dist2FM_DT),'.'])
+
+
 % EIGENVALUES IN A DISK
 % Continuos time
 disp('Results EIGENVALUES IN A DISK (Continuous-time):')
@@ -317,7 +350,7 @@ disp(['-  Decentralized: Feasibility=',num2str(feas_dec_CT_5),', rho=',num2str(r
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_CT_5),', rho=',num2str(rho_dist1_CT_5),', FM=',num2str(Dist1FM_CT),'.'])
 disp(['-  Distributed (u1-x2): Feasibility=',num2str(feas_dist2_CT_5),', rho=',num2str(rho_dist2_CT_5),', FM=',num2str(Dist2FM_CT),'.'])
 % % Discrete time
-disp('Results LIMITATION ON THE SPECTRAL ABSCISSA (Discrete-time):')
+disp('Results EIGENVALUES IN A DISK (Discrete-time):')
 disp(['-  Centralized: Feasibility=',num2str(feas_c_DT_5),', rho=',num2str(rho_c_DT_5),', FM=',num2str(CFM_DT),'.'])
 disp(['-  Decentralized: Feasibility=',num2str(feas_dec_DT_5),', rho=',num2str(rho_dec_DT_5),', FM=',num2str(DFM_DT),'.'])
 disp(['-  Distributed (u2-x1): Feasibility=',num2str(feas_dist1_DT_5),', rho=',num2str(rho_dist1_DT_5),', FM=',num2str(Dist1FM_DT),'.'])
@@ -389,7 +422,7 @@ eig_dist1_CL_CT_2=eig(A_dist1_cl_2);
 A_dist2_cl_2=Atot+B*K_dist2_CT_2;
 eig_dist2_CL_CT_2=eig(A_dist2_cl_2);
 
-% PLOT Continuos time closed loop STABLE CONTROLLER
+% PLOT Continuos time closed loop CONTROL EFFORT
 figure
 plot(real(eig_c_CL_CT_2),imag(eig_c_CL_CT_2),'xk',real(eig_dec_CL_CT_2),imag(eig_dec_CL_CT_2),'xr',real(eig_dist1_CL_CT_2),imag(eig_dist1_CL_CT_2),'*g',real(eig_dist2_CL_CT_2),imag(eig_dist2_CL_CT_2),'xb','MarkerSize',8,'LineWidth',2);
 grid
@@ -411,7 +444,7 @@ eig_dist1_CL_DT_2=eig(F_dist1_cl_2);
 F_dist2_cl_2=Ftot+G*K_dist2_DT_2;
 eig_dist2_CL_DT_2=eig(F_dist2_cl_2);
 
-% PLOT Discrete time closed loop STABLE CONTROLLER
+% PLOT Discrete time closed loop CONTROL EFFORT
 figure
 x = [-1:0.01:1];
 y = sqrt(1-x.^2);
@@ -423,13 +456,107 @@ title('DT Closed-loop eigenvalue positions REDUCTION CONTROL EFFORT','FontSize',
 xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 hold off
 
-%% Analysis closed-loop stability REDUCTION CONTROL EFFORT CONTROLLER
-
 %% Analysis closed-loop stability LIMITATION ON THE SPECTRAL ABSCISSA CONTROLLER
+
+% CT closed-loop stability
+% Eigenvalues CENTRALIZED 
+A_c_cl_3=Atot+B*K_c_CT_3;
+eig_c_CL_CT_3=eig(A_c_cl_3);
+% Eigenvalues DECENTRALIZED
+A_dec_cl_3=Atot+B*K_dec_CT_3;
+eig_dec_CL_CT_3=eig(A_dec_cl_3);
+% Eigenvalues DISTRIBUTED 1
+A_dist1_cl_3=Atot+B*K_dist1_CT_3;
+eig_dist1_CL_CT_3=eig(A_dist1_cl_3);
+% Eigenvalues DISTRIBUTED 2
+A_dist2_cl_3=Atot+B*K_dist2_CT_3;
+eig_dist2_CL_CT_3=eig(A_dist2_cl_3);
+
+% PLOT Continuos time closed loop STABLE CONTROLLER
+figure
+plot(real(eig_c_CL_CT_3),imag(eig_c_CL_CT_3),'xk',real(eig_dec_CL_CT_3),imag(eig_dec_CL_CT_3),'xr',real(eig_dist1_CL_CT_3),imag(eig_dist1_CL_CT_3),'*g',real(eig_dist2_CL_CT_3),imag(eig_dist2_CL_CT_3),'xb','MarkerSize',8,'LineWidth',2);
+grid
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+title('CT Closed-loop eigenvalue positions LIMITATION ON THE SPECTRAL ABSCISSA','FontSize',20)
+legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
 
 %% Analysis closed-loop stability LIMITATION ON THE SPECTRAL RADIUS CONTROLLER
 
+% DT closed-loop stability
+% Eigenvalues CENTRALIZED 
+F_c_cl_4=Ftot+G*K_c_DT_4;
+eig_c_CL_DT_4=eig(F_c_cl_4);
+% Eigenvalues DECENTRALIZED
+F_dec_cl_4=Ftot+G*K_dec_DT_4;
+eig_dec_CL_DT_4=eig(F_dec_cl_4);
+% Eigenvalues DISTRIBUTED 1
+F_dist1_cl_4=Ftot+G*K_dist1_DT_4;
+eig_dist1_CL_DT_4=eig(F_dist1_cl_4);
+% Eigenvalues DISTRIBUTED 2
+F_dist2_cl_4=Ftot+G*K_dist2_DT_4;
+eig_dist2_CL_DT_4=eig(F_dist2_cl_4);
+
+% PLOT Discrete time closed loop SPECTRAL RADIUS
+figure
+x = [-1:0.01:1];
+y = sqrt(1-x.^2);
+hold on
+plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
+plot(real(eig_c_CL_DT_2),imag(eig_c_CL_DT_4),'xk',real(eig_dec_CL_DT_4),imag(eig_dec_CL_DT_4),'xr',real(eig_dist1_CL_DT_4),imag(eig_dist1_CL_DT_4),'*g',real(eig_dist2_CL_DT_4),imag(eig_dist2_CL_DT_4),'xb','MarkerSize',8,'LineWidth',2);
+legend('','','','','','Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+title('DT Closed-loop eigenvalue positions LIMITING SPECTRAL RADIUS','FontSize',20);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+hold off
+
 %% Analysis closed-loop stability LIMITATION IN A DISK CONTROLLER
+
+% CT closed-loop stability
+% Eigenvalues CENTRALIZED 
+A_c_cl_5=Atot+B*K_c_CT_5;
+eig_c_CL_CT_5=eig(A_c_cl_5);
+% Eigenvalues DECENTRALIZED
+A_dec_cl_5=Atot+B*K_dec_CT_5;
+eig_dec_CL_CT_5=eig(A_dec_cl_5);
+% Eigenvalues DISTRIBUTED 1
+A_dist1_cl_5=Atot+B*K_dist1_CT_5;
+eig_dist1_CL_CT_5=eig(A_dist1_cl_5);
+% Eigenvalues DISTRIBUTED 2
+A_dist2_cl_5=Atot+B*K_dist2_CT_5;
+eig_dist2_CL_CT_5=eig(A_dist2_cl_5);
+
+% PLOT Continuos time closed loop STABLE CONTROLLER
+figure
+plot(real(eig_c_CL_CT_5),imag(eig_c_CL_CT_5),'xk',real(eig_dec_CL_CT_5),imag(eig_dec_CL_CT_5),'xr',real(eig_dist1_CL_CT_5),imag(eig_dist1_CL_CT_5),'*g',real(eig_dist2_CL_CT_5),imag(eig_dist2_CL_CT_5),'xb','MarkerSize',8,'LineWidth',2);
+grid
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+title('CT Closed-loop eigenvalue positions LIMITATION IN A DISK','FontSize',20)
+legend('Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+
+% DT closed-loop stability
+% Eigenvalues CENTRALIZED 
+F_c_cl_5=Ftot+G*K_c_DT_5;
+eig_c_CL_DT_5=eig(F_c_cl_5);
+% Eigenvalues DECENTRALIZED
+F_dec_cl_5=Ftot+G*K_dec_DT_5;
+eig_dec_CL_DT_5=eig(F_dec_cl_5);
+% Eigenvalues DISTRIBUTED 1
+F_dist1_cl_5=Ftot+G*K_dist1_DT_5;
+eig_dist1_CL_DT_5=eig(F_dist1_cl_5);
+% Eigenvalues DISTRIBUTED 2
+F_dist2_cl_5=Ftot+G*K_dist2_DT_5;
+eig_dist2_CL_DT_5=eig(F_dist2_cl_5);
+
+% PLOT Discrete time closed loop STABLE CONTROLLER
+figure
+x = [-1:0.01:1];
+y = sqrt(1-x.^2);
+hold on
+plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
+plot(real(eig_c_CL_DT_5),imag(eig_c_CL_DT_5),'xk',real(eig_dec_CL_DT_5),imag(eig_dec_CL_DT_5),'xr',real(eig_dist1_CL_DT_5),imag(eig_dist1_CL_DT_5),'*g',real(eig_dist2_CL_DT_5),imag(eig_dist2_CL_DT_5),'xb','MarkerSize',8,'LineWidth',2);
+legend('','','','','','Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
+title('DT Closed-loop eigenvalue positions LIMITATION IN A DISK','FontSize',20);
+xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
+hold off
 
 %% Analysis closed-loop stability LIMITATION IN A REGION CONTROLLER
 
@@ -440,9 +567,9 @@ hold off
 
 % Simulation BASIC CONTROLLER
 
-Tfinal=20;
-T=[0:0.01:Tfinal];
-h=0.01;
+Tfinal=250;
+T=[0:0.01:250];
+h=1;
 
 x0=[];
 x0=[x0;randn(4,1)];
@@ -472,7 +599,7 @@ for i=1:4
     plot(T,[x_dec_CT((i),:)],'m')
     plot(T,[x_dist1_CT((i),:)],'b')
     plot(T,[x_dist2_CT((i),:)],'r')
-    axis([0 T(end) min(x0)-4 max(x0)+4])
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -486,7 +613,7 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT((i),:)],'r.-')
-    axis([0 T(end) min(x0)-4 max(x0)+4])
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -517,7 +644,7 @@ for i=1:4
     plot(T,[x_dec_CT_2((i),:)],'m')
     plot(T,[x_dist1_CT_2((i),:)],'b')
     plot(T,[x_dist2_CT_2((i),:)],'r')
-    axis([0 T(end) min(x0)-4 max(x0)+4])
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -531,7 +658,101 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT_2((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT_2((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT_2((i),:)],'r.-')
-    axis([0 T(end) min(x0)-4 max(x0)+4])
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+% Simulation LIMITATION ON THE SPECTRAL ABSCISSA
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT_3(:,k)=expm((A_c_cl_3)*t)*x0;
+    x_dec_CT_3(:,k)=expm((A_dec_cl_3)*t)*x0;
+    x_dist1_CT_3(:,k)=expm((A_dist1_cl_3)*t)*x0;
+    x_dist2_CT_3(:,k)=expm((A_dist2_cl_3)*t)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT LIMIT SPECTRAL ABSCISSA X_{',num2str(i),'}'])
+    plot(T,[x_c_CT_3((i),:)],'k')
+    plot(T,[x_dec_CT_3((i),:)],'m')
+    plot(T,[x_dist1_CT_3((i),:)],'b')
+    plot(T,[x_dist2_CT_3((i),:)],'r')
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+% Simulation LIMITING SPECTRAL RADIUS
+
+k=0;
+for k=1:Tfinal/h
+    x_c_DT_4(:,k)=((F_c_cl_4)^k)*x0;
+    x_dec_DT_4(:,k)=((F_dec_cl_4)^k)*x0;
+    x_dist1_DT_4(:,k)=((F_dist1_cl_4)^k)*x0;
+    x_dist2_DT_4(:,k)=((F_dist2_cl_4)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT LIMITING SPECTRAL RADIUS X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT_4((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT_4((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT_4((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT_4((i),:)],'r.-')
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+% Simulation LIMITATION IN A DISK
+
+k=0;
+for t=T
+    k=k+1;
+    x_c_CT_5(:,k)=expm((A_c_cl_5)*t)*x0;
+    x_dec_CT_5(:,k)=expm((A_dec_cl_5)*t)*x0;
+    x_dist1_CT_5(:,k)=expm((A_dist1_cl_5)*t)*x0;
+    x_dist2_CT_5(:,k)=expm((A_dist2_cl_5)*t)*x0;
+end
+for k=1:Tfinal/h
+    x_c_DT_5(:,k)=((F_c_cl_5)^k)*x0;
+    x_dec_DT_5(:,k)=((F_dec_cl_5)^k)*x0;
+    x_dist1_DT_5(:,k)=((F_dist1_cl_5)^k)*x0;
+    x_dist2_DT_5(:,k)=((F_dist2_cl_5)^k)*x0;
+end
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['CT LIMITATION IN A DISK X_{',num2str(i),'}'])
+    plot(T,[x_c_CT_5((i),:)],'k')
+    plot(T,[x_dec_CT_5((i),:)],'m')
+    plot(T,[x_dist1_CT_5((i),:)],'b')
+    plot(T,[x_dist2_CT_5((i),:)],'r')
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
+end
+legend('Centralized','Decentralized','Distributed 1','Distributed 2')
+
+figure
+for i=1:4
+    subplot(2,2,i)
+    hold on
+    grid on
+    subtitle(['DT LIMITATION IN A DISK X_{',num2str(i),'}'])
+    plot([h:h:Tfinal],[x_c_DT_5((i),:)],'k.-')
+    plot([h:h:Tfinal],[x_dec_DT_5((i),:)],'m.-')
+    plot([h:h:Tfinal],[x_dist1_DT_5((i),:)],'b.-')
+    plot([h:h:Tfinal],[x_dist2_DT_5((i),:)],'r.-')
+    %axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 

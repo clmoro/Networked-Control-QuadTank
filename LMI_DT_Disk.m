@@ -51,8 +51,8 @@ else
     end
 end
 
-alpha = 0.5; % We constraints Re(eigs(A))<alpha
-rho = 0.2; % We constraints all eigs to have radius < rho
+alpha = 0.1; % We constraints Re(eigs(A))<alpha
+rho = 0.89; % We constraints all eigs to have radius < rho
 if abs(alpha+rho)>=1
     disp('The disk constraint is not inside the unitary circle!')
     pause
@@ -61,7 +61,7 @@ end
 % is inside the unitary circle. So |alpha+rho|<1
 % Dimensions of the matrices: Kx(mtot,ntot), L(mtot,ntot), Y(ntot,ntot).
 LMIconstr = [[(rho^2-(1-alpha)^2)*P-F*P*F'-F*L'*Gtot'-Gtot*L*F'-(1-alpha)*(P*F'+F*P+L'*Gtot'+Gtot*L),Gtot*L;
-                L'*Gtot',P]>=-1e-2*eye(2*ntot)];
+                L'*Gtot',P]>=1e-2*eye(2*ntot)];
 % options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr);%,[],options);
 feas=J.problem;

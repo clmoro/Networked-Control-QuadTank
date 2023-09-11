@@ -51,7 +51,7 @@ else
     end  
 end
 
-alpha = 8; % We constraints Re(eigs(A))<alpha
+alpha = 0.1; % We constraints Re(eigs(A))<-alpha
 LMIconstr=[Y*A'+A*Y+Btot*L+L'*Btot'+2*alpha*Y<=-1e-2*eye(ntot)]+[Y>=1e-2*eye(ntot)];
 options=sdpsettings('solver','sedumi');
 J=optimize(LMIconstr,[],options);
