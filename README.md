@@ -25,3 +25,5 @@ Perform the following analysis:
        the control laws.
     e. Analyze the properties of the so-obtained closed-loop systems (e.g., stability,
        eigenvalues) and compute the closed-loop system trajectories (generated both in continuous-time and in discrete-time) of the system variables, starting from a common random initial condition.
+
+
