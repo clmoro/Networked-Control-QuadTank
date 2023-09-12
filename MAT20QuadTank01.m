@@ -34,8 +34,10 @@ T=[1 0 0 0;
     0 1 0 0
     0 0 1 0];
 
-Atot=T*Atot0/T;
+Atot=T*Atot0/T
 Bdec{1}=T*Bdec0{1};
 Bdec{2}=T*Bdec0{2};
 Cdec{1}=Cdec0{1}/T;
 Cdec{2}=Cdec0{2}/T;
+B
+C
