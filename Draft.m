@@ -502,7 +502,7 @@ x = [-1:0.01:1];
 y = sqrt(1-x.^2);
 hold on
 plot(zeros(size(x)),x,':k',x,zeros(size(x)),':k',x,y,':k',x,-y,':k',0,0,'.b')
-plot(real(eig_c_CL_DT_2),imag(eig_c_CL_DT_4),'xk',real(eig_dec_CL_DT_4),imag(eig_dec_CL_DT_4),'xr',real(eig_dist1_CL_DT_4),imag(eig_dist1_CL_DT_4),'*g',real(eig_dist2_CL_DT_4),imag(eig_dist2_CL_DT_4),'xb','MarkerSize',8,'LineWidth',2);
+plot(real(eig_c_CL_DT_4),imag(eig_c_CL_DT_4),'xk',real(eig_dec_CL_DT_4),imag(eig_dec_CL_DT_4),'xr',real(eig_dist1_CL_DT_4),imag(eig_dist1_CL_DT_4),'*g',real(eig_dist2_CL_DT_4),imag(eig_dist2_CL_DT_4),'xb','MarkerSize',8,'LineWidth',2);
 legend('','','','','','Centralized','Decentralized','Distributed 1','Distributed 2','FontSize',18)
 title('DT Closed-loop eigenvalue positions LIMITING SPECTRAL RADIUS','FontSize',20);
 xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
