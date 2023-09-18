@@ -135,7 +135,7 @@ xlabel('Real Axis','FontSize',18);ylabel('Imaginary Axis','FontSize',18);
 
 %% D-T system analysis
 % sampling time TS chose considering Ttransient = 5/rho
-TS = 1;
+TS = 5; % 1; We were used to set 1. But 5 may be a better decision
 systemDT = c2d(systemCT, TS);
 [Ftot,G,H,L,Ts]=ssdata(systemDT);
 Gdec{1} = G(:,1);
@@ -599,7 +599,7 @@ for i=1:4
     plot(T,[x_dec_CT((i),:)],'m')
     plot(T,[x_dist1_CT((i),:)],'b')
     plot(T,[x_dist2_CT((i),:)],'r')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -613,7 +613,7 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT((i),:)],'r.-')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -644,7 +644,7 @@ for i=1:4
     plot(T,[x_dec_CT_2((i),:)],'m')
     plot(T,[x_dist1_CT_2((i),:)],'b')
     plot(T,[x_dist2_CT_2((i),:)],'r')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -658,7 +658,7 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT_2((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT_2((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT_2((i),:)],'r.-')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -683,7 +683,7 @@ for i=1:4
     plot(T,[x_dec_CT_3((i),:)],'m')
     plot(T,[x_dist1_CT_3((i),:)],'b')
     plot(T,[x_dist2_CT_3((i),:)],'r')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -707,7 +707,7 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT_4((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT_4((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT_4((i),:)],'r.-')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -738,7 +738,7 @@ for i=1:4
     plot(T,[x_dec_CT_5((i),:)],'m')
     plot(T,[x_dist1_CT_5((i),:)],'b')
     plot(T,[x_dist2_CT_5((i),:)],'r')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 
@@ -752,7 +752,7 @@ for i=1:4
     plot([h:h:Tfinal],[x_dec_DT_5((i),:)],'m.-')
     plot([h:h:Tfinal],[x_dist1_DT_5((i),:)],'b.-')
     plot([h:h:Tfinal],[x_dist2_DT_5((i),:)],'r.-')
-    %axis([0 T(end) min(x0)-4 max(x0)+4])
+%     axis([0 T(end) min(x0)-4 max(x0)+4])
 end
 legend('Centralized','Decentralized','Distributed 1','Distributed 2')
 

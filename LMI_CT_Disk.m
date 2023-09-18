@@ -44,6 +44,7 @@ else
         for j=1:N
             if ContStruc(i,j)==0
                 L(minc+1:minc+m(i),ninc+1:ninc+n(j))=zeros(m(i),n(j));
+                disp('test')
             end
             ninc=ninc+n(j);
         end
@@ -51,13 +52,13 @@ else
     end
 end
 
-alpha = 6; % We constraints Re(eigs(A))<alpha
-rho = 5.9; % We constraints all eigs to have radius < rho
+alpha = 6; % We constraints eigs(A) to be in a disk of centre=-alpha
+rho = 5.9; % and radius < rho
 % Dimensions of the matrices: Kx(mtot,ntot), L(mtot,ntot), Y(ntot,ntot).
-LMIconstr = [[(rho^2-alpha^2)*P-A*P*A'-A*L'*Btot'-Btot*L*A'-alpha*(P*A'+A*P+L'*Btot'+Btot*L),Btot*L;
-                L'*Btot',P]>=1e-20*eye(2*ntot)];
-%options=sdpsettings('solver','sedumi');
-J=optimize(LMIconstr);%,[],options);
+LMIconstr = [[((rho)^2-(alpha)^2)*P-A*P*A'-A*L'*Btot'-Btot*L*A'-(alpha)*(P*A'+A*P+L'*Btot'+Btot*L),Btot*L;
+                L'*Btot',P]>=1e-2*eye(2*ntot)];
+options=sdpsettings('solver','sedumi');
+J=optimize(LMIconstr,[],options);
 feas=J.problem;
 L=double(L);
 P=double(P);
