@@ -1,7 +1,7 @@
 # Networked-Control-QuadTank
 
 
-ALESSANDRO PEVERALI
+ALESSANDRO PEVERALI,
 ANGELO MORONCELLI 
  
 Overall, the linearized system dynamics (around a given equilibrium point) can be described by the following model:
